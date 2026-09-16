@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# 绝不要把 vault 内容提交进来
+vault/
+Obsidian_database/
+00_Inbox/
+01_Daily/
+02_Reports/
+03_Knowledge/
+04_Projects/
+
+# 本地配置
+config.local.*
+.local/
