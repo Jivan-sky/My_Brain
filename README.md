@@ -80,6 +80,8 @@ cd mybrain
 
 `install.sh` 会询问你的 vault 路径，把 11 个 skill 装到 `~/.claude/skills/`，全局规则装到 `~/.claude/rules/common/`，并把 skill 里的 `{{VAULT_PATH}}` 占位符替换成你的真实路径。
 
+同时它会**只在文件不存在时**把 `templates/` 下的 `_词表.md` 和 `_资产契约.md` 播种到 vault 根目录——规则文件会去读这两个文件，缺了规则就落不了地。已有版本绝不覆盖。
+
 > 仓库里的 skill 用 `{{VAULT_PATH}}` 占位，是为了不把个人路径硬编码进开源仓库。`install.sh` 在安装时完成替换。
 
 ### 用法

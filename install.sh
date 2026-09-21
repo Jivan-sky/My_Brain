@@ -22,7 +22,7 @@ printf '\n  MyBrain 安装程序\n\n'
 # ---------- 1. 确定 vault 路径 ----------
 VAULT="${1:-}"
 if [ -z "$VAULT" ]; then
-  printf '  Obsidian vault 路径（例如 D:\\Obsidian_database 或 ~/vault）: '
+  printf '  Obsidian vault 路径（例如 ~/vault 或 /path/to/vault）: '
   read -r VAULT
 fi
 [ -n "$VAULT" ] || die "vault 路径不能为空"
@@ -47,6 +47,24 @@ else
     ok "已创建 vault 目录结构"
   fi
 fi
+
+mkdir -p "$VAULT"/{00_Inbox,01_Daily/$(date +%Y-%m),02_Reports/周报,02_Reports/月报,03_Knowledge,04_Projects}
+
+# ---------- 1b. 播种元数据文件 ----------
+# _词表.md / _资产契约.md 是规则文件要读的元数据层。
+# 只在不存在时播种，绝不覆盖用户已有的版本。
+seed_meta() {
+  local name="$1"
+  local dst="$VAULT/$name"
+  if [ -e "$dst" ]; then
+    ok "$name 已存在，跳过"
+  else
+    cp "$REPO_DIR/templates/$name" "$dst"
+    ok "已播种 $name（模板，按需修改）"
+  fi
+}
+seed_meta "_词表.md"
+seed_meta "_资产契约.md"
 
 # ---------- 2. 检查依赖 ----------
 command -v perl >/dev/null 2>&1 || die "需要 perl（用于替换路径占位符）"
@@ -92,6 +110,17 @@ if [ -n "$leftover" ]; then
   printf '    %s\n' $leftover
 else
   ok "所有占位符已替换"
+fi
+
+missing_meta=""
+for name in "_词表.md" "_资产契约.md"; do
+  [ -e "$VAULT/$name" ] || missing_meta="$missing_meta $name"
+done
+if [ -n "$missing_meta" ]; then
+  warn "vault 缺少元数据文件：$missing_meta"
+  printf '    全局规则会去读它们。装完请手动补齐。\n'
+else
+  ok "元数据文件就位（_词表.md / _资产契约.md）"
 fi
 
 printf '\n  完成：%s 个 skill + 1 条全局规则\n\n' "$count"
