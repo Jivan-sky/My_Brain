@@ -7,25 +7,25 @@ description: 查看 Obsidian 知识库结构、定位和导航笔记。用于理
 
 ## Vault 位置
 
-`{{VAULT_PATH}}\`
+`{{VAULT_PATH}}/`
 
 ## 目录结构
 
 ```
-{{VAULT_PATH}}\
-├── 00_Inbox\             — 待处理条目
-├── 01_Daily\YYYY-MM\     — 日报（按月分层）
-├── 02_Reports\周报|月报\  — 周报/月报
-├── 03_Knowledge\         — 知识（01-AI与Claude / 02-工具链 / 03-业务域 / 04-开发与运维）
-└── 04_Projects\          — 项目决策/里程碑（按项目子目录）
+{{VAULT_PATH}}/
+├── 00_Inbox/             — 待处理条目
+├── 01_Daily/YYYY-MM/     — 日报（按月分层）
+├── 02_Reports/周报|月报/  — 周报/月报
+├── 03_Knowledge/         — 知识，按 <NN-主题>/ 子目录分类（见 _MOC.md）
+└── 04_Projects/          — 项目决策/里程碑（按项目子目录，见 _MOC.md）
 ```
 
 ## 命名与约定
 
-- 日报文件名：`YYYY-MM-DD.md`（`01_Daily\YYYY-MM\`）
-- 周报文件名：`YYYY-WXX.md`（`02_Reports\周报\YYYY\`）
-- 月报文件名：`YYYY-MM.md`（`02_Reports\月报\YYYY\`）
-- 所有 note 带 frontmatter：`title` / `created` / `tags`（tags 至少含 `type/知识捕获`）
+- 日报文件名：`YYYY-MM-DD.md`（`01_Daily/YYYY-MM/`）
+- 周报文件名：`YYYY-WXX.md`（`02_Reports/周报/YYYY/`）
+- 月报文件名：`YYYY-MM.md`（`02_Reports/月报/YYYY/`）
+- 所有 note 带 frontmatter：`title` / `created` / `tags`。`type/` 取值来自 vault 根目录 `_词表.md` 的受控词表，每篇恰好 1 个
 
 ## 工作流
 

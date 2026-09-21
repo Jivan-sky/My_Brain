@@ -13,15 +13,15 @@ description: 汇总本月周报与日报生成月报,写入 Obsidian 02_Reports/
 
 ## Vault 位置
 
-`{{VAULT_PATH}}\`（结构见 `/obsidian-vault` skill）
+`{{VAULT_PATH}}/`（结构见 `/obsidian-vault` skill）
 
 ## 目录结构
 
 ```
-{{VAULT_PATH}}\
-├── 01_Daily\YYYY-MM\YYYY-MM-DD.md   — 日报（数据源）
-├── 02_Reports\周报\YYYY\YYYY-WXX.md  — 周报（数据源）
-└── 02_Reports\月报\YYYY\YYYY-MM.md   — 月报（写入目标）
+{{VAULT_PATH}}/
+├── 01_Daily/YYYY-MM/YYYY-MM-DD.md   — 日报（数据源）
+├── 02_Reports/周报/YYYY/YYYY-WXX.md  — 周报（数据源）
+└── 02_Reports/月报/YYYY/YYYY-MM.md   — 月报（写入目标）
 ```
 
 ## 执行流程
@@ -46,8 +46,7 @@ description: 汇总本月周报与日报生成月报,写入 Obsidian 02_Reports/
 title: "月报 — YYYY年MM月"
 created: YYYY-MM-DD
 tags:
-  - type/知识捕获
-  - monthly
+  - type/monthly
 ---
 
 # 月报 — YYYY年MM月

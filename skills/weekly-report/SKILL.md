@@ -13,14 +13,14 @@ description: 汇总本周日报生成周报,写入 Obsidian 02_Reports/周报。
 
 ## Vault 位置
 
-`{{VAULT_PATH}}\`（结构见 `/obsidian-vault` skill）
+`{{VAULT_PATH}}/`（结构见 `/obsidian-vault` skill）
 
 ## 目录结构
 
 ```
-{{VAULT_PATH}}\
-├── 01_Daily\YYYY-MM\YYYY-MM-DD.md   — 日报（数据源）
-└── 02_Reports\周报\YYYY\YYYY-WXX.md  — 周报（写入目标）
+{{VAULT_PATH}}/
+├── 01_Daily/YYYY-MM/YYYY-MM-DD.md   — 日报（数据源）
+└── 02_Reports/周报/YYYY/YYYY-WXX.md  — 周报（写入目标）
 ```
 
 ## 执行流程
@@ -49,8 +49,7 @@ description: 汇总本周日报生成周报,写入 Obsidian 02_Reports/周报。
 title: "周报 — YYYY年第X周 (M/D-M/D)"
 created: YYYY-MM-DD
 tags:
-  - type/知识捕获
-  - weekly
+  - type/weekly
 ---
 
 # 周报 — YYYY年第X周

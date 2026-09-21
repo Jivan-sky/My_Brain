@@ -41,7 +41,7 @@ description: 分析对话提取项目决策与里程碑,路由到 Obsidian 04_Pr
 title: "<文档/决策标题>"
 created: YYYY-MM-DD
 tags:
-  - type/知识捕获
+  - type/project
   - project/<项目名>
 ---
 

@@ -21,6 +21,7 @@ description: 汇总当日工作内容并写入 Obsidian 日报。触发词:日�
 - 回顾当前对话会话中完成的事项
 - 读取今日 `01_Daily/YYYY-MM/YYYY-MM-DD.md`（如 start-my-day 已创建，则合并）
 - 检查 `04_Projects/` 中最近修改的文件
+- 若当前项目有自动化产出（checkpoint、导出报告等），一并纳入
 
 ### 步骤 2：写入 Obsidian 日报
 文件路径：`{{VAULT_PATH}}/01_Daily/YYYY-MM/YYYY-MM-DD.md`
@@ -31,8 +32,7 @@ description: 汇总当日工作内容并写入 Obsidian 日报。触发词:日�
 title: "YYYY-MM-DD 每日记录"
 created: YYYY-MM-DD
 tags:
-  - type/知识捕获
-  - daily
+  - type/daily
   - <项目tag>   # 从会话上下文推断，多个项目可多行
 ---
 
@@ -82,5 +82,6 @@ tags:
 写入后一句话确认：日报已写入 Obsidian。
 
 ## 注意
-- 此技能不绑定任何特定项目。
+- 此技能不绑定任何特定项目。自动化流水线只是众多工作来源之一。
+- 不要假设每天都有自动化产出——只在有 checkpoint 或用户提及时才纳入。
 - 默认精简版，别先写长版。

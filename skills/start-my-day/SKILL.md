@@ -40,8 +40,7 @@ description: 整合昨日待办与 Inbox 生成今日任务清单与晨间简报
 title: "YYYY-MM-DD 每日记录"
 created: YYYY-MM-DD
 tags:
-  - type/知识捕获
-  - daily
+  - type/daily
 ---
 
 ## 所属阶段

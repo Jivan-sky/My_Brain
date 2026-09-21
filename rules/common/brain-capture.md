@@ -21,4 +21,24 @@
 ## 写入规范
 - 写入 `01_Daily/` 时，文件名采用 `YYYY-MM/YYYY-MM-DD.md` 格式（按月分层目录），内容追加而非覆盖。
 - 写入前先快速检查目标目录，若当日已有类似内容的记录，则跳过不重复写入。
-- 每条写入的 frontmatter 必须包含 `title`、`created`、`tags` 三个字段，tags 至少包含 `type/知识捕获`。
+- 每条写入的 frontmatter 必须包含 `title`、`created`、`tags` 三个字段。旧写法 `type/知识捕获` 已废弃，改用受控词表。
+- 标签只能从 `{{VAULT_PATH}}/_词表.md` 的受控词表里选；每篇必须恰好 1 个 `type/`（按所在目录定：daily/weekly/monthly/meeting/knowledge/project/moc）。
+- `03_Knowledge/` 的知识卡 frontmatter 必须含 `source: "[[源笔记]]"` 外键，回链派生它的 L1 记录。
+
+## L1 不可删（硬约束）
+- **`01_Daily/`（日报）、`02_Reports/`（周报月报）、`04_Projects/`（项目笔记）是用户的「里程记录」，永久保留。**
+- ❌ 严禁删除、移出目录、合并进知识卡、打包封存。
+- ❌ 严禁在整理/精简/重构方案里提议「删掉已提炼的日记」这类动作——L1 是事实表，`03_Knowledge` 只是从它派生的视图。删事实表留视图是本末倒置。
+- ✅ 允许：L1 内部归位（错位文件移回同类目录）、补 frontmatter 标签、建索引/MOC 指向它、从它派生知识卡。
+- 完整规则见 `{{VAULT_PATH}}/_资产契约.md`。**任何涉及 L1 的批量操作前先读它。**
+- 批量改文件前必须：tar 备份 + dry-run 打印全量 diff + 人确认；脚本读写必须带 `newline=''`（否则 Python 会把 LF 静默转成 CRLF）。
+
+## 外部产出同步（强制）
+- **任何落在 Obsidian 之外的产出，必须同步一份进知识库**，典型如：
+  - 其他工作目录（`Plan_history/` 之类）下的计划书 / 笔记 / 状态文件
+  - 本地脚本产出的报告、导出文件
+- 同步规则：
+  - 带项目名/工单号的具体业务 → `04_Projects/<项目>/`
+  - 可复用的方法、踩坑、原理 → `03_Knowledge/<主题>/`
+  - 同步后在 `04_Projects/_MOC.md` 或 `03_Knowledge/_MOC.md` 补链接，并在当日 `01_Daily/` 记一行
+- 知识边界判断：`03_Knowledge` 只放可复用主题知识；带项目名的具体业务复盘放 `04_Projects`。
