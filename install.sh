@@ -90,6 +90,45 @@ for src in "$REPO_DIR"/skills/*/; do
   count=$((count + 1))
 done
 
+# ---------- 3b. 安装契约校验脚本 ----------
+# vault_doctor.py 的 L1 基线按 vault 现状写入，装完那一刻即为「只增不减」的起点。
+# 只放脚本，不自动跑 —— 跑不跑由人决定。
+printf '\n  安装契约校验脚本到 %s/_scripts\n' "$VAULT"
+mkdir -p "$VAULT/_scripts"
+
+L1_COUNT="$(
+  find "$VAULT/01_Daily" "$VAULT/02_Reports" "$VAULT/04_Projects" \
+       -type f -name '*.md' 2>/dev/null | wc -l | tr -d ' '
+)"
+case "$L1_COUNT" in ''|*[!0-9]*) L1_COUNT=0 ;; esac
+
+script_count=0
+for src in "$REPO_DIR"/_scripts/*.py; do
+  [ -e "$src" ] || continue
+  name="$(basename "$src")"
+  dst="$VAULT/_scripts/$name"
+
+  if [ -e "$dst" ]; then
+    backup="${dst}.bak.$(date +%Y%m%d-%H%M%S)"
+    mv "$dst" "$backup"
+    warn "$name 已存在，备份到 $(basename "$backup")"
+  fi
+
+  cp "$src" "$dst"
+  MYBRAIN_L1="$L1_COUNT" perl -pi -e 's/\{\{L1_BASELINE\}\}/$ENV{MYBRAIN_L1}/g' "$dst"
+  ok "$name"
+  script_count=$((script_count + 1))
+done
+
+if [ "$script_count" -eq 0 ]; then
+  warn "仓内没有 _scripts/*.py，跳过"
+elif [ "$L1_COUNT" -eq 0 ]; then
+  warn "L1 基线写入为 0（vault 里还没有 01_Daily/02_Reports/04_Projects？）——第 8 项检查将跳过"
+else
+  ok "L1 基线写入为 $L1_COUNT（日后只增不减）"
+fi
+info "跑法：cd \"$VAULT\" && python _scripts/vault_doctor.py"
+
 # ---------- 4. 安装全局规则 ----------
 printf '\n  安装全局规则到 %s\n' "$RULES_DIR"
 rule_src="$REPO_DIR/rules/common/brain-capture.md"
@@ -104,7 +143,8 @@ ok "brain-capture.md"
 
 # ---------- 5. 校验 ----------
 printf '\n  校验\n'
-leftover=$(grep -rl '{{VAULT_PATH}}' "$SKILLS_DIR" "$rule_dst" 2>/dev/null || true)
+leftover=$(grep -rl '{{VAULT_PATH}}\|{{L1_BASELINE}}' \
+  "$SKILLS_DIR" "$rule_dst" "$VAULT/_scripts" 2>/dev/null || true)
 if [ -n "$leftover" ]; then
   warn "以下文件仍有未替换的占位符："
   printf '    %s\n' $leftover
@@ -123,8 +163,9 @@ else
   ok "元数据文件就位（_词表.md / _资产契约.md）"
 fi
 
-printf '\n  完成：%s 个 skill + 1 条全局规则\n\n' "$count"
+printf '\n  完成：%s 个 skill + 1 条全局规则 + %s 个校验脚本\n\n' "$count" "$script_count"
 printf '  下一步：\n'
 printf '    1. 在 agent 客户端里说「/start-my-day」试试\n'
 printf '    2. 新的对话会自动触发知识捕获（每次会话最多 3 条）\n'
-printf '    3. 随时用「/save-to-brain」手动做一次完整归档\n\n'
+printf '    3. 随时用「/save-to-brain」手动做一次完整归档\n'
+printf '    4. 体检：cd "%s" && python _scripts/vault_doctor.py\n\n' "$VAULT"

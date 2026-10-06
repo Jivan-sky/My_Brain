@@ -82,6 +82,8 @@ cd mybrain
 
 同时它会**只在文件不存在时**把 `templates/` 下的 `_词表.md` 和 `_资产契约.md` 播种到 vault 根目录——规则文件会去读这两个文件，缺了规则就落不了地。已有版本绝不覆盖。
 
+最后把两个契约校验脚本装到 vault 的 `_scripts/` 下（同名文件存在则先备份）：`vault_doctor.py`（8 项体检）和 `check_links.py`（只查链接）。`vault_doctor.py` 里的 **L1 基线按你 vault 安装那一刻的现状写入**——日后只增不减。
+
 > 仓库里的 skill 用 `{{VAULT_PATH}}` 占位，是为了不把个人路径硬编码进开源仓库。`install.sh` 在安装时完成替换。
 
 ### 用法
@@ -95,6 +97,16 @@ cd mybrain
 /weekly-report         # 周五：日报聚合为周报
 /monthly-report        # 月末：周报聚合为月报
 ```
+
+体检（命令行跑，不经 agent）：
+
+```bash
+cd <VAULT_PATH>
+python _scripts/vault_doctor.py     # 8 项契约检查，只读，exit 1 = 有违规
+python _scripts/check_links.py      # 只查 wikilink 有效性
+```
+
+`vault_doctor.py` 加 `--md` 会把报告写到 `_scripts/_doctor_report.md`。
 
 ---
 
@@ -237,6 +249,19 @@ checklist 用三态：`- [ ]` 未完成、`- [x]` 本日补完、`~~划线~~` �
 
 个人路径不进开源仓库，别人也能用自己的目录。
 
+### 10. 契约要可执行，否则等于没有
+
+`_资产契约.md` 写了三条不变量，但**文档本身不会报警**。
+
+「文件总数只增」——没有东西在数。「`sum(type) == md 总数`」——没有东西在算。「知识卡必须有 `source`」——没有东西在查。
+
+一份没人执行的契约，真实约束力等于零。所以把这三条（连同其余几条卫生检查）写成了 `_scripts/vault_doctor.py`，只读、8 项、exit 1 即违规。
+
+两个刻意的设计：
+
+- **基线由安装时写入**，不写死在仓库里。别人的 vault 有自己的规模，硬编码一个数字只会让检查对谁都失效。
+- **不挂 hook、不自动跑**。它是把尺子，不是门禁 —— 工具该报事实，不该替人决定什么时候必须停下来。
+
 ---
 
 ## 目录约定
@@ -245,6 +270,9 @@ checklist 用三态：`- [ ]` 未完成、`- [x]` 本日补完、`~~划线~~` �
 <VAULT_PATH>/
 ├── _词表.md               — 标签受控词表（新 tag 先加这里）
 ├── _资产契约.md            — 分级与保留策略（L1 不可删）
+├── _scripts/              — 契约校验脚本（install.sh 装进来）
+│   ├── vault_doctor.py    — 8 项体检
+│   └── check_links.py     — 只查 wikilink
 ├── 00_Inbox/              — 待处理（从外部拉进来的原始条目）
 ├── 01_Daily/YYYY-MM/      — 日报，按月分层
 │   └── YYYY-MM-DD.md
